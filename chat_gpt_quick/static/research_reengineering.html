@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Reengineering</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        /* Container and Panels */
+        .container {
+            display: flex;
+            width: 90%;
+            height: 80%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .panel {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ddd;
+            overflow-y: auto;
+        }
+
+        .panel.left {
+            border-right: 1px solid #ddd;
+        }
+
+        .panel.right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sentiment-panel {
+            flex: 1;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table-panel {
+            flex: 2;
+            padding: 10px;
+        }
+
+        /* Typography */
+        h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        p {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #007bff;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        /* Button Styling */
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Text Area */
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="window.location.href='/'" style="position: absolute; top: 10px; right: 10px;">
+        Switch to Main Page
+    </button>
+    <div class="container">
+        <div class="panel left">
+            <h2>Enter Your Claim</h2>
+            <textarea id="user-claim" placeholder="Type your claim here..."></textarea>
+            <button id="submit-claim" style="margin-top: 10px;">Submit</button>
+        </div>
+        <div class="panel right">
+            <div class="sentiment-panel">
+                <h2>Sentiment Analysis</h2>
+                <p id="sentiment-result">No analysis yet.</p>
+            </div>
+            <div class="table-panel">
+                <h2>Research Papers</h2>
+                <table id="research-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Abstract</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">No data available.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Handle the form submission
+        document.getElementById('submit-claim').addEventListener('click', () => {
+            const claim = document.getElementById('user-claim').value.trim();
+            if (claim) {
+                fetch('/research_reengineering', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ claim })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle sentiment result
+                    const sentimentResult = document.getElementById('sentiment-result');
+                    sentimentResult.textContent = data.sentiment || "No sentiment available.";
+
+                    // Populate the research table
+                    const tableBody = document.getElementById('research-table').querySelector('tbody');
+                    tableBody.innerHTML = ''; // Clear existing rows
+
+                    if (data.papers && data.papers.length > 0) {
+                        data.papers.forEach(paper => {
+                            const row = `
+                                <tr>
+                                    <td>${paper.title}</td>
+                                    <td>${paper.abstract}</td>
+                                    <td><a href="${paper.link}" target="_blank">View Paper</a></td>
+                                </tr>
+                            `;
+                            tableBody.innerHTML += row;
+                        });
+                    } else {
+                        const row = '<tr><td colspan="3">No research papers found.</td></tr>';
+                        tableBody.innerHTML = row;
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('An error occurred. Please try again.');
+                });
+            } else {
+                alert('Please enter a claim.');
+            }
+        });
+    </script>
+</body>
+</html>

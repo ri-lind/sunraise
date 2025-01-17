@@ -11,3 +11,9 @@ class IndustryInsight(BaseModel):
     actionable_insights: List[str]  # Practical applications of the research in the industry
     target_industries: List[str]  # Challenges or limitations of applying the research
     potential_impact: str  # Description of the business impact (e.g., cost savings, efficiency)
+    
+class TableEntryResearchPaper(BaseModel):
+    title: str  # Title of the research paper
+    publishing_date: str  # Publishing date of the paper
+    support: Optional[bool]  # Whether the paper supports the claim (True/False/None)
+    summary : str 
