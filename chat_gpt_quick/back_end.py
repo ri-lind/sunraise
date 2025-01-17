@@ -103,7 +103,7 @@ def research_reengineering():
         search_params = completion.choices[0].message.content.strip()
 
         # Step 2: Fetch research papers
-        research_papers = fetch_research_papers(search_params, max_results=5)
+        research_papers = fetch_research_papers(search_params, max_results=2)
         if not research_papers:
             return jsonify({"error": "No research papers found"}), 404
 
@@ -117,11 +117,11 @@ def research_reengineering():
         
         data = {
             "sentiment" : f"{sentiment}",
-            "table_entries": table_entries
+            "papers": table_entries
         }
-
+        json_data = jsonify(data)
         # Step 4: Return results
-        return jsonify(data)
+        return json_data
 
     except Exception as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500

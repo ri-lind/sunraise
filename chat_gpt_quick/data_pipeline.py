@@ -163,22 +163,22 @@ def analyze_overall_sentiment(papers: List[TableEntryResearchPaper], claim: str,
     """
     # Combine summaries of all papers into a single string
     combined_summaries = "\n\n".join(
-        f"Title: {paper.title}\nSummary: {paper.summary}" for paper in papers
+        f"Title: {paper.get("title")}\nSummary: {paper.get("summary")}" for paper in papers
     )
 
     # Create the OpenAI prompt
     prompt = (
-        f"Analyze the following research papers and determine whether they collectively support, refute, or are neutral "
+        f"Analyze the following research papers and determine whether they collectively support, refute, or are neutral."
         f"with respect to the claim: '{claim}'.\n\n"
         f"Research Papers:\n{combined_summaries}\n\n"
         f"Respond with 'support', 'refute', or 'neutral' and provide a brief explanation."
     )
 
     # Send the prompt to OpenAI
-    completion = client.beta.chat.completions.create(
+    completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are an AI expert in analyzing research papers for sentiment analysis."},
+            {"role": "system", "content": "You are an AI expert in analyzing research papers for sentiment analysis. Keep it very short, a maximum of three sentences."},
             {"role": "user", "content": prompt},
         ],
     )
