@@ -35,8 +35,10 @@ def generate_from_keywords():
     keywords = keywords.replace(" ", "+")
     papers = fetch_research_papers(keywords, 1)
     if papers:
-        insight = extract_insight(papers[0], openai_client)
-        return jsonify({"insight": insight.key_insight})
+        insight = extract_insight(papers[0], openai_client) # research paper to insight
+        insight = insight.model_dump()
+        print(insight)
+        return jsonify({"insight": insight})
     return jsonify({"error": "No papers found"}), 400
 
 @app.route('/')

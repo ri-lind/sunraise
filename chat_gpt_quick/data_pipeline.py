@@ -88,7 +88,7 @@ def extract_insight(research_paper: Munch, client: OpenAI):
     completion = client.beta.chat.completions.parse(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are an expert in extracting valuable insights from research papers. Extract the insight from the following research paper."},
+            {"role": "system", "content": "You are an expert in extracting actionable insights for industry from research papers. Extract the insight from the following research paper."},
             {"role": "user", "content": research_paper.__str__()},
         ],
         response_format=IndustryInsight,
