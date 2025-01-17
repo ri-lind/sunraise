@@ -4,6 +4,7 @@ import os
 from entities import ResearchPaper, IndustryInsight
 from data_pipeline import fetch_research_papers, extract_insight
 from openai import OpenAI
+import random
 
 app = Flask(__name__)
 
@@ -33,9 +34,12 @@ def generate_from_keywords():
     keywords : str = data.get('keywords', "")
     keywords = keywords.replace(", ", "+")
     keywords = keywords.replace(" ", "+")
-    papers = fetch_research_papers(keywords, 1)
+    papers = fetch_research_papers(keywords, 5)
     if papers:
-        insight = extract_insight(papers[0], openai_client) # research paper to insight
+        random_choice = 0
+        if len(papers) > 1:
+            random_choice = random.randrange(0, len(papers))
+        insight = extract_insight(papers[random_choice], openai_client) # research paper to insight
         insight = insight.model_dump()
         print(insight)
         return jsonify({"insight": insight})
