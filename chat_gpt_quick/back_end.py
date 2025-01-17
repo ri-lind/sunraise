@@ -30,8 +30,10 @@ def upload_file():
 @app.route('/generate', methods=['POST'])
 def generate_from_keywords():
     data = request.json
-    keywords = data.get('keywords', [])
-    papers = fetch_research_papers(keywords, max_papers=1)
+    keywords : str = data.get('keywords', "")
+    keywords = keywords.replace(", ", "+")
+    keywords = keywords.replace(" ", "+")
+    papers = fetch_research_papers(keywords, 1)
     if papers:
         insight = extract_insight(papers[0], openai_client)
         return jsonify({"insight": insight.key_insight})
