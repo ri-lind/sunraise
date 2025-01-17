@@ -139,8 +139,7 @@
                     <thead>
                         <tr>
                             <th>Title</th>
-                            <th>Abstract</th>
-                            <th>Link</th>
+                            <th>Supports Claim</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -177,8 +176,7 @@
                             const row = `
                                 <tr>
                                     <td>${paper.title}</td>
-                                    <td>${paper.abstract}</td>
-                                    <td><a href="${paper.link}" target="_blank">View Paper</a></td>
+                                    <td>${paper.support}</td>
                                 </tr>
                             `;
                             tableBody.innerHTML += row;
