@@ -85,10 +85,25 @@
         .container {
             margin-top: 20px; /* Add spacing below the logo */
         }
+
+
+        .logo-image {
+            width: 60px; /* Reduce the width for a smaller logo */
+            height: auto; /* Maintain the aspect ratio */
+            cursor: pointer; /* Optional: Change cursor to pointer on hover */
+        }
+        
+        .logo-image:hover {
+            transform: scale(1.1); /* Slightly enlarge on hover */
+            transition: transform 0.2s ease-in-out;
+        }        
         
     </style>
 </head>
 <body>
+    <div class="logo-top-left">
+        <img src="static/images/logo-sunraise.png" alt="SunRAIse Logo" class="logo-image">
+    </div>
     <div class="logo-container">
         <span class="logo-text">
             SUNR<span class="highlight">AI</span>SE
