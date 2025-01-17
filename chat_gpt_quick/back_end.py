@@ -5,6 +5,8 @@ from entities import ResearchPaper, IndustryInsight
 from data_pipeline import fetch_research_papers, extract_insight
 from openai import OpenAI
 import random
+import fitz
+from munch import Munch
 
 app = Flask(__name__)
 
@@ -21,12 +23,36 @@ def upload_file():
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
-        # Process file (e.g., extract text using a library like PyPDF2)
-        extracted_text = "Mock extracted text from PDF"  # Replace with actual extraction logic
-        research_paper = ResearchPaper(title=filename, abstract=extracted_text, authors=[], keywords=[])
-        insight = extract_insight(research_paper, openai_client)
-        return jsonify({"insight": insight.key_insight})
+        
+        # Extract text from the PDF
+        extracted_text = extract_text_from_pdf(filepath)
+        print(extracted_text)
+        insight : dict = {"title" : filename, 
+            "abstract" : extracted_text,
+            "keywords" : []
+            }
+        # Replace with your own logic for insights extraction
+        research_paper = Munch(insight)
+        industry_insight = extract_insight(research_paper, openai_client)
+        industry_insight =  industry_insight.model_dump()
+        
+        return jsonify({"insight": industry_insight})
     return jsonify({"error": "No file uploaded"}), 400
+
+def extract_text_from_pdf(pdf_path):
+    """
+    Extracts text from a PDF file using PyMuPDF (fitz).
+    :param pdf_path: Path to the PDF file.
+    :return: Extracted text as a string.
+    """
+    text = ""
+    try:
+        with fitz.open(pdf_path) as pdf:
+            for page in pdf:  # Iterate through pages
+                text += page.get_text()  # Extract text from each page
+    except Exception as e:
+        text = f"Error extracting text: {str(e)}"
+    return text
 
 @app.route('/generate', methods=['POST'])
 def generate_from_keywords():
