@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import os
 from entities import ResearchPaper, IndustryInsight
-from data_pipeline import fetch_research_papers, extract_insight
+from data_pipeline import fetch_research_papers, extract_insight, analyze_paper_support, analyze_overall_sentiment
 from openai import OpenAI
 import random
 import fitz
@@ -71,9 +71,71 @@ def generate_from_keywords():
         return jsonify({"insight": insight})
     return jsonify({"error": "No papers found"}), 400
 
+
+@app.route('/research_reengineering', methods=['POST'])
+def research_reengineering():
+    data = request.json
+    claim = data.get('claim', "").strip()
+    if not claim:
+        return jsonify({"error": "No claim provided"}), 400
+
+    try:
+        # Step 1: Generate search parameters
+        search_params_prompt = (
+            f"Transform the following user claim into a concise search query for academic research. "
+            f"- Use only the most relevant keywords from the claim. "
+            f"- Separate the keywords with a '+' to make the query compatible with search engines like arXiv. "
+            f"- Remove unnecessary words such as 'the,' 'of,' or 'and.' "
+            f"- The resulting query should prioritize precision and relevance, focusing on the core concepts of the claim.\n\n"
+            f"Example:\n"
+            f"Claim: 'Artificial intelligence helps optimize energy efficiency in data centers.'\n"
+            f"artificial+intelligence+energy+efficiency+data+centers\n\n"
+            f"Now, process this claim:\n"
+            f"Claim: '{claim}'"
+        )
+        completion = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "Transform user claims into search parameters for academic research."},
+                {"role": "user", "content": search_params_prompt},
+            ]
+        )
+        search_params = completion.choices[0].message.content.strip()
+
+        # Step 2: Fetch research papers
+        research_papers = fetch_research_papers(search_params, max_results=5)
+        if not research_papers:
+            return jsonify({"error": "No research papers found"}), 404
+
+        # Step 3: Analyze support/refute for each paper
+        table_entries = [
+            analyze_paper_support(paper, claim, openai_client).model_dump()
+            for paper in research_papers
+        ]
+        
+        sentiment = analyze_overall_sentiment(table_entries, claim, openai_client)
+        
+        data = {
+            "sentiment" : f"{sentiment}",
+            "table_entries": table_entries
+        }
+
+        # Step 4: Return results
+        return jsonify(data)
+
+    except Exception as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+
+
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
+
+@app.route('/research_reengineering', methods=['GET'])
+def research_reengineering_page():
+    return app.send_static_file('research_reengineering.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

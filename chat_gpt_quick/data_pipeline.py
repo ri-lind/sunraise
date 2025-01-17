@@ -5,9 +5,8 @@ from crossref.restful import Works, Etiquette
 from munch import Munch
 from openai import OpenAI
 from typing import List
-from entities import ResearchPaper, IndustryInsight
+from entities import IndustryInsight, TableEntryResearchPaper
 import feedparser
-import urllib, urllib.request
 
 # Load environment variables
 load_dotenv()
@@ -121,3 +120,69 @@ def save_to_database(conn, research_papers, insights):
         ))
 
     conn.commit()
+
+
+def analyze_paper_support(research_paper: Munch, claim: str, client: OpenAI) -> TableEntryResearchPaper:
+    """
+    Analyzes whether a research paper supports or refutes a given claim using OpenAI's parsing functionality.
+
+    :param research_paper: A Munch object representing the research paper.
+    :param claim: The user's claim in natural language.
+    :param client: An OpenAI client instance.
+    :return: A parsed TableEntryResearchPaper object.
+    """
+    completion = client.beta.chat.completions.parse(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an AI that determines if research papers support, refute, or are neutral regarding a claim."
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"Claim: '{claim}'\n\n"
+                    f"Research Paper:\n{research_paper}\n\n"
+                    "Respond with a JSON object in the format of TableEntryResearchPaper."
+                )
+            }
+        ],
+        response_format=TableEntryResearchPaper
+    )
+    return completion.choices[0].message.parsed
+
+
+def analyze_overall_sentiment(papers: List[TableEntryResearchPaper], claim: str, client: OpenAI) -> str:
+    """
+    Analyzes the overall sentiment of a list of research papers with respect to a given claim.
+
+    :param papers: List of TableEntryResearchPaper objects.
+    :param claim: The user's claim in natural language.
+    :param client: OpenAI client instance.
+    :return: Overall sentiment as a string.
+    """
+    # Combine summaries of all papers into a single string
+    combined_summaries = "\n\n".join(
+        f"Title: {paper.title}\nSummary: {paper.summary}" for paper in papers
+    )
+
+    # Create the OpenAI prompt
+    prompt = (
+        f"Analyze the following research papers and determine whether they collectively support, refute, or are neutral "
+        f"with respect to the claim: '{claim}'.\n\n"
+        f"Research Papers:\n{combined_summaries}\n\n"
+        f"Respond with 'support', 'refute', or 'neutral' and provide a brief explanation."
+    )
+
+    # Send the prompt to OpenAI
+    completion = client.beta.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are an AI expert in analyzing research papers for sentiment analysis."},
+            {"role": "user", "content": prompt},
+        ],
+    )
+
+    # Extract the response content
+    overall_sentiment = completion.choices[0].message.content.strip()
+    return overall_sentiment
