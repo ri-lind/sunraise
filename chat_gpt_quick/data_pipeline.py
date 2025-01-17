@@ -6,6 +6,8 @@ from munch import Munch
 from openai import OpenAI
 from typing import List
 from entities import ResearchPaper, IndustryInsight
+import feedparser
+import urllib, urllib.request
 
 # Load environment variables
 load_dotenv()
@@ -41,27 +43,48 @@ def initialize_database():
     conn.commit()
     return conn
 
-# Fetch research papers from CrossRef API
-def fetch_research_papers(keywords: List[str], max_papers: int = 10):
-    etiquette = Etiquette('Sunrise Prototype', '1.0', 'N/A', 'r.harizaj@uni-muenster.de')
-    works = Works(etiquette=etiquette)
-    query = works.query(" ".join(keywords)).filter(has_abstract="true").sort("issued")
+# Scrape arxiv.org instead of crossref.
+def fetch_research_papers(title_query: str, max_results: int = 10):
+    """
+    Fetch research papers from arXiv using a title-based search query.
+    
+    The request will have the following form:
+    http://export.arxiv.org/api/query?search_query=ti:"electron thermal conductivity"&sortBy=lastUpdatedDate&sortOrder=ascending
+    
+    :param title_query: The title search string (e.g., 'electron thermal conductivity')
+    :param max_results: The maximum number of results to return (not used in the template below)
+    :return: A list of research paper entries
+    """
+    
+    base_url = "http://export.arxiv.org/api/query?"
 
-    papers = []
-    for work in query.sample(max_papers):
-        if len(papers) >= max_papers:
-            break
-        if work.get("title") and work.get("abstract"):
-            paper = ResearchPaper(
-                title=work["title"][0],
-                abstract=work["abstract"],
-                url=work.get("URL"),
-            )
-            papers.append(paper)
-    return papers
+    # Construct the query parameter to search for papers with the title containing the given phrase.
+    # Note: The double quotes need to be included in the query.
+    search_query = f'all:{title_query}'
+    start = 0                     # retreive the first 5 results
+    # Create dictionary for query parameters. The max_results parameter is not shown in the template URL,
+    # but you can include it if needed.
+     
+    
+    url = f'{base_url}search_query={search_query}&start={start}&max_results={max_results}'
+
+    
+    print("Request URL:", url)  # Optional: print the URL for debugging
+    
+    # Parse the response using feedparser
+    api_response = feedparser.parse(url)
+    api_response = Munch(api_response)
+
+    # Process the entries, converting each to a Munch object for easier attribute access
+    research_papers = []
+    for entry in api_response.entries:
+        entry = Munch(entry)
+        research_papers.append(entry)
+    
+    return research_papers
 
 # Convert research paper to industry insight
-def extract_insight(research_paper: ResearchPaper, client: OpenAI):
+def extract_insight(research_paper: Munch, client: OpenAI):
     completion = client.beta.chat.completions.parse(
         model="gpt-4o-mini",
         messages=[
@@ -98,24 +121,3 @@ def save_to_database(conn, research_papers, insights):
         ))
 
     conn.commit()
-
-# Main function
-def main():
-    conn = initialize_database()
-
-    keywords = ["Artificial Intelligence", "Academia", "Industry"]
-    research_papers = fetch_research_papers(keywords, max_papers=10)
-
-    insights = []
-    for paper in research_papers:
-        try:
-            insight = extract_insight(paper, openai_client)
-            insights.append(insight)
-        except Exception as e:
-            print(f"Error processing paper {paper.title}: {e}")
-
-    save_to_database(conn, research_papers, insights)
-    conn.close()
-
-if __name__ == "__main__":
-    main()
