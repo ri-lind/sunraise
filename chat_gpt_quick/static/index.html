@@ -8,8 +8,8 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center horizontally */
             height: 100vh;
             margin: 0;
             background-color: #f9f9f9;
@@ -53,9 +53,49 @@
             background-color: #f0f0f0;
             border-left: 4px solid #007bff;
         }
+
+        .logo-container {
+            text-align: center; /* Center everything in the container */
+            margin: 20px 0; /* Add spacing above and below */
+        }
+        
+        .logo-text {
+            font-family: 'Arial', sans-serif;
+            font-size: 2.5rem; /* Large and prominent */
+            font-weight: bold; /* Bold text */
+            letter-spacing: 0.1em; /* Add spacing between letters */
+            text-transform: uppercase; /* Make all letters uppercase */
+            color: #007bff; /* Default blue color */
+        }
+        
+        .logo-text .highlight {
+            color: #ff9500; /* Orange color for "AI" */
+        }
+        
+        .quote {
+            font-family: 'Georgia', serif; /* Use a serif font for the quote */
+            font-size: 1.2rem; /* Slightly smaller size */
+            font-style: italic; /* Make the text italic */
+            color: #555; /* Neutral gray color */
+            margin-top: 10px; /* Add spacing between the logo and the quote */
+        }
+        
+    
+        /* Adjust the container to give space for the logo */
+        .container {
+            margin-top: 20px; /* Add spacing below the logo */
+        }
+        
     </style>
 </head>
 <body>
+    <div class="logo-container">
+        <span class="logo-text">
+            SUNR<span class="highlight">AI</span>SE
+        </span>
+        <p class="quote">"From research to insight, with AI."</p>
+    </div>
+    
     <div class="container">
         <div class="panel left">
             <h2>Upload Paper or Enter Keywords</h2>
