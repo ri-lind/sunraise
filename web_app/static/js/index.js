@@ -90,6 +90,26 @@ const dropZone = document.getElementById('drop-zone');
 
         submitButton.addEventListener('click', () => {
             const keywords = keywordsInput.value.trim();
+
+            const totalMoveDistance = 400
+            let moveCount = 0; // Track the number of movements
+            const maxMoves = 4; // Maximum movements
+            let animationInterval; // Store the interval
+            const moveDistance = totalMoveDistance/maxMoves;
+
+            const moveButton = () => {
+                if (moveCount < maxMoves) {
+                    const currentTransform = submitButton.style.transform || 'translateX(0px)';
+                    const currentX = parseInt(currentTransform.match(/-?\d+/) || 0);
+                    submitButton.style.transform = `translateX(${currentX + moveDistance}px)`;
+                    moveCount++;
+                } else {
+                    clearInterval(animationInterval); // Stop the interval after 5 movements
+                }
+            };
+
+            animationInterval = setInterval(moveButton, 500); // Move every second
+
             fetch('/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -97,6 +117,13 @@ const dropZone = document.getElementById('drop-zone');
             })
             .then(response => response.json())
             .then(data => {
+                // reset Button
+                // Reset the button position
+                clearInterval(animationInterval); // Stop the animation interval
+                submitButton.style.transform = 'translateX(0px)'; // Reset the position
+                moveCount = 0; // Reset the move counter
+
+
                 if (data.insight) {
                     const insight = data.insight;
         

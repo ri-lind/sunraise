@@ -107,7 +107,7 @@ body {
     border-radius: 10px; /* Rounded corners */
     cursor: pointer; /* Pointer cursor on hover */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out; /* Smooth transform transitions */
 }
 
 .generate-button:hover {
@@ -118,4 +118,9 @@ body {
 .generate-button:active {
     background-color: #4682B4; /* Even darker blue when pressed */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduce shadow on click */
+}
+
+.generate-button.slide-right {
+    transform: translateX(100px); /* Slide 100px to the right */
+    background-color: #4682B4; /* Change background color during slide */
 }
