@@ -1,25 +1,69 @@
+/* General Styling */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center horizontally */
     height: 100vh;
     background-color: #f9f9f9;
 }
 
-/* Container and Panels */
-.container {
+/* Center logo, text, and quote at the top */
+.logo-container {
     display: flex;
-    width: 90%;
-    height: 80%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
+    flex-direction: column; /* Stack logo and text vertically */
+    align-items: center; /* Center align horizontally */
+    justify-content: center; /* Center align vertically */
+    width: 100%; /* Ensure it spans the full width */
+    margin-bottom: 20px; /* Add spacing below the logo container */
+    text-align: center; /* Center-align text */
 }
 
+.logo-image {
+    width: 80px; /* Adjust the size */
+    height: auto;
+    margin-bottom: 10px; /* Add spacing between logo and text */
+}
+
+.logo-image:hover {
+    transform: scale(1.1); /* Slightly enlarge on hover */
+    transition: transform 0.2s ease-in-out;
+}
+
+.logo-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #007bff;
+}
+
+.logo-text .highlight {
+    color: #ff9500; /* Highlight "AI" in orange */
+}
+
+.quote {
+    font-family: 'Georgia', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* Panels Container */
+.container {
+    display: flex;
+    flex-direction: row; /* Panels side by side */
+    width: 80%;
+    height: 70%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 0; /* Remove spacing above the container */
+}
+
+/* Panels Styling */
 .panel {
     flex: 1;
     padding: 20px;
@@ -92,6 +136,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
+    margin-bottom: 20px; /* Add space below the button */
 }
 
 button:hover {
