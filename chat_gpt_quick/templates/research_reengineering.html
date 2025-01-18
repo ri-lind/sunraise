@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research Reengineering</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/research_reengineering .css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/research_reengineering.css') }}">
 </head>
 <body>
     <button onclick="window.location.href='/'" style="position: absolute; top: 10px; right: 10px;">
@@ -39,49 +39,6 @@
             </div>
         </div>
     </div>
-    <script>
-        // Handle the form submission
-        document.getElementById('submit-claim').addEventListener('click', () => {
-            const claim = document.getElementById('user-claim').value.trim();
-            if (claim) {
-                fetch('/research_reengineering', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ claim })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Handle sentiment result
-                    const sentimentResult = document.getElementById('sentiment-result');
-                    sentimentResult.textContent = data.sentiment || "No sentiment available.";
-
-                    // Populate the research table
-                    const tableBody = document.getElementById('research-table').querySelector('tbody');
-                    tableBody.innerHTML = ''; // Clear existing rows
-
-                    if (data.papers && data.papers.length > 0) {
-                        data.papers.forEach(paper => {
-                            const row = `
-                                <tr>
-                                    <td>${paper.title}</td>
-                                    <td>${paper.support}</td>
-                                </tr>
-                            `;
-                            tableBody.innerHTML += row;
-                        });
-                    } else {
-                        const row = '<tr><td colspan="3">No research papers found.</td></tr>';
-                        tableBody.innerHTML = row;
-                    }
-                })
-                .catch(err => {
-                    console.error('Error:', err);
-                    alert('An error occurred. Please try again.');
-                });
-            } else {
-                alert('Please enter a claim.');
-            }
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/research_reengineering.js') }}"></script>
 </body>
 </html>
