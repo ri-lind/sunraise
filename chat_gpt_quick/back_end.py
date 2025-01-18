@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from werkzeug.utils import secure_filename
 import os
 from entities import ResearchPaper, IndustryInsight
@@ -128,13 +128,13 @@ def research_reengineering():
 
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
-    return app.send_static_file('index.html')
+    return render_template('index.html')
 
 @app.route('/research_reengineering', methods=['GET'])
 def research_reengineering_page():
-    return app.send_static_file('research_reengineering.html')
+    return render_template('research_reengineering.html')
 
 
 if __name__ == '__main__':
