@@ -156,3 +156,12 @@ textarea {
     margin: 0 auto; /* Center it horizontally within the panel */
     display: inline-block; /* Ensure it stays inline with the button alignment */
 }
+
+.green-icon {
+    color: green;
+    font-size: 1.2rem;
+}
+.red-icon {
+    color: red;
+    font-size: 1.2rem;
+}

@@ -18,10 +18,13 @@ document.getElementById('submit-claim').addEventListener('click', () => {
 
             if (data.papers && data.papers.length > 0) {
                 data.papers.forEach(paper => {
+                    const icon = paper.support ? 
+                    '<span style="color: green;">&#x2714;</span>' : 
+                    '<span style="color: red;">&#x2716;</span>';
                     const row = `
                         <tr>
                             <td>${paper.title}</td>
-                            <td>${paper.support}</td>
+                            <td>${icon}</td>
                         </tr>
                     `;
                     tableBody.innerHTML += row;
