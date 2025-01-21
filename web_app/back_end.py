@@ -137,5 +137,23 @@ def research_reengineering_page():
     return render_template('research_reengineering.html')
 
 
+@app.route('/generate_dashboard', methods=['GET'])
+def generate_dashboard():
+    # Replace this example data with actual logic
+    # Example: Query a database, calculate trends, etc.
+    data = {
+        "labels": ["2019", "2020", "2021", "2022", "2023"],
+        "datasets": [
+            {
+                "label": "Average Scores",
+                "data": [3.5, 4.2, 4.0, 4.5, 4.7],
+                "borderColor": "rgba(75, 192, 192, 1)",
+                "borderWidth": 2,
+                "fill": False
+            }
+        ]
+    }
+    return jsonify(data)
+
 if __name__ == '__main__':
     app.run(debug=True)
