@@ -1,4 +1,5 @@
-function handleSentimentGeneration() {
+// Define the function to handle sentiment generation
+export function handleSentimentGeneration() {
     const claim = document.getElementById('user-claim').value.trim();
     if (claim) {
         fetch('/research_reengineering', {
@@ -42,5 +43,3 @@ function handleSentimentGeneration() {
         alert('Please enter a claim.');
     }
 }
-// Add the event listener and call the new function
-document.getElementById('submit-claim').addEventListener('click', handleSentimentGeneration);

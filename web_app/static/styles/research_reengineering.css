@@ -165,3 +165,30 @@ textarea {
     color: red;
     font-size: 1.2rem;
 }
+
+
+
+/* Dashboard panel styling */
+.dashboard-panel {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+}
+
+.dashboard-panel h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Chart container styling */
+.dashboard-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
