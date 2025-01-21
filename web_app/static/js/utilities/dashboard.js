@@ -1,4 +1,4 @@
-export function updateDashboard() {
+export function updateDashboard(claim) {
     fetch('/generate_dashboard', {
         method: 'GET'
     })

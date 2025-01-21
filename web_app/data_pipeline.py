@@ -43,7 +43,7 @@ def initialize_database():
     return conn
 
 # Scrape arxiv.org instead of crossref.
-def fetch_research_papers(title_query: str, max_results: int = 10):
+def fetch_research_papers(title_query: str, max_results: int):
     """
     Fetch research papers from arXiv using a title-based search query.
     
