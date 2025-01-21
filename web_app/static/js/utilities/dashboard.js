@@ -1,4 +1,5 @@
-// Import Chart.js (make sure this is included in your HTML or setup)
+import { getRandomNumbers } from "./misc.js";
+
 const Chart = window.Chart;
 
 // Function to initialize the chart
@@ -10,7 +11,7 @@ export function initializeChart() {
             labels: ['2019', '2020', '2021', '2022', '2023'], // Example years
             datasets: [{
                 label: 'Average Scores',
-                data: [3.5, 4.2, 4.0, 4.5, 4.7], // Example data
+                data: getRandomNumbers(5), // random data
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 2,
                 fill: false,
