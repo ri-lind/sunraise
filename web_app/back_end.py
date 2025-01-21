@@ -2,11 +2,13 @@ from flask import Flask, request, jsonify, render_template
 from werkzeug.utils import secure_filename
 import os
 from entities import ResearchPaper, IndustryInsight
-from data_pipeline import fetch_research_papers, extract_insight, analyze_paper_support, analyze_overall_sentiment
 from openai import OpenAI
 import random
 import fitz
 from munch import Munch
+
+from data_pipeline import fetch_research_papers, extract_insight, analyze_paper_support, analyze_overall_sentiment
+from dashboard_utilities import createDashboardData
 
 app = Flask(__name__)
 
@@ -137,10 +139,17 @@ def research_reengineering_page():
     return render_template('research_reengineering.html')
 
 
-@app.route('/generate_dashboard', methods=['GET'])
+@app.route('/generate_dashboard', methods=['POST'])
 def generate_dashboard():
     # Replace this example data with actual logic
     # Example: Query a database, calculate trends, etc.
+    
+    data = request.json
+    claim = data.get('claim', "").strip()
+    if not claim:
+        return jsonify({"error": "No claim provided"}), 400
+    
+    data = createDashboardData(claim)
     data = {
         "labels": ["2019", "2020", "2021", "2022", "2023"],
         "datasets": [
