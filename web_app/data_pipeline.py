@@ -48,7 +48,7 @@ def fetch_research_papers(title_query: str, max_results: int):
     Fetch research papers from arXiv using a title-based search query.
     
     The request will have the following form:
-    http://export.arxiv.org/api/query?search_query=ti:"electron thermal conductivity"&sortBy=lastUpdatedDate&sortOrder=ascending
+    http://export.arxiv.org/api/query?search_query=ti:"electron thermal conductivity"&sortBy=lastUpdatedDate&sortOrder=descending
     
     :param title_query: The title search string (e.g., 'electron thermal conductivity')
     :param max_results: The maximum number of results to return (not used in the template below)
@@ -136,7 +136,7 @@ def analyze_paper_support(research_paper: Munch, claim: str, client: OpenAI) -> 
         messages=[
             {
                 "role": "system",
-                "content": "You are an AI that determines if research papers support, refute, or are neutral regarding a claim."
+                "content": "You are an AI that determines if research papers support, refute, or are neutral regarding a claim. Also provide a numerical score on how much the paper refutes or supports the claim, with a range from 0 to 5."
             },
             {
                 "role": "user",

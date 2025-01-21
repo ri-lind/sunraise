@@ -16,4 +16,5 @@ class TableEntryResearchPaper(BaseModel):
     title: str  # Title of the research paper
     publishing_date: str  # Publishing date of the paper
     support: bool  # Whether the paper supports the claim (True/False/None)
+    support_score : float
     summary : str 

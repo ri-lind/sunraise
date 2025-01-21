@@ -149,19 +149,9 @@ def generate_dashboard():
     if not claim:
         return jsonify({"error": "No claim provided"}), 400
     
-    data = createDashboardData(claim)
-    data = {
-        "labels": ["2019", "2020", "2021", "2022", "2023"],
-        "datasets": [
-            {
-                "label": "Average Scores",
-                "data": [3.5, 4.2, 4.0, 4.5, 4.7],
-                "borderColor": "rgba(75, 192, 192, 1)",
-                "borderWidth": 2,
-                "fill": False
-            }
-        ]
-    }
+    data = createDashboardData(claim, openai_client)
+    
+    data = [1, 2, 3, 4, 5]
     return jsonify(data)
 
 if __name__ == '__main__':
