@@ -151,7 +151,7 @@ def generate_dashboard():
     
     data = createDashboardData(claim, openai_client)
     
-    data = [1, 2, 3, 4, 5]
+    
     return jsonify(data)
 
 if __name__ == '__main__':

@@ -45,18 +45,15 @@ export function initializeChart() {
         }
     });
 }
-
-// Function to update the dashboard with new data
 export function updateDashboard(claim) {
-    
-    if(chart){
+    if (chart) {
         chart.destroy();
     }
+
     const canvas = document.getElementById('chart'); // Get the canvas element
     canvas.width = canvas.parentElement.offsetWidth; // Set width to match parent container
     canvas.height = canvas.parentElement.offsetHeight; // Set height to match parent container
     const ctx = document.getElementById('chart').getContext('2d'); // Get the canvas context
-
 
     fetch('/generate_dashboard', {
         method: 'POST',
@@ -67,14 +64,24 @@ export function updateDashboard(claim) {
     })
     .then(response => response.json())
     .then(data => {
-        
+        // Convert the month numbers to month names
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        // Extract labels (month names) and data (average scores)
+        const labels = Object.keys(data).map(month => monthNames[parseInt(month) - 1]);
+        const scores = Object.values(data);
+
+        // Update the chart
         chart = new Chart(ctx, {
             type: 'line', // Example chart type
             data: {
-                labels: ['2019', '2020', '2021', '2022', '2023'], // Example years
+                labels: labels, // Use the month names as labels
                 datasets: [{
                     label: 'Average Scores',
-                    data: data, // random data
+                    data: scores, // Use the scores from the backend
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 2,
                     fill: false,
@@ -93,7 +100,7 @@ export function updateDashboard(claim) {
                     x: {
                         title: {
                             display: true,
-                            text: 'Year',
+                            text: 'Month',
                         },
                     },
                     y: {

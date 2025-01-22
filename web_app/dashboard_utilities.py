@@ -44,13 +44,13 @@ def createDashboardData(claim, openai_client : OpenAI):
     # Create dictionary for query parameters. The max_results parameter is not shown in the template URL,
     # but you can include it if needed.
     research_papers = {}    
-    current_month = get_latest_month(f'{base_url}search_query={search_query}&start={start}&max_results={100}&sortBy=submittedDate&sortOrder=descending') # initialize first month without looping logic
+    current_month = get_latest_month(f'{base_url}search_query={search_query}&start={start}&max_results={10}&sortBy=submittedDate&sortOrder=descending') # initialize first month without looping logic
     month_counter = 0
     batches = 1000
     
-    start = time.time()
-    while len(research_papers.keys()) <= 2:
-        if int(time.time() - start)> 20: # break if more than 20 seconds.
+    start_time = time.time()
+    while len(research_papers.keys()) <= 3:
+        if int(time.time() - start_time)> 20: # break if more than 20 seconds.
             break
         papers_of_current_month = research_papers.get(current_month, [])
         url = f'{base_url}search_query={search_query}&start={start}&max_results={batches}&sortBy=submittedDate&sortOrder=descending'
@@ -60,7 +60,7 @@ def createDashboardData(claim, openai_client : OpenAI):
         for entry in api_response.entries:
             entry = Munch(entry)
             
-            month = int(entry.updated[5:7])
+            month = int(entry.updated[5:7]) # actually day
             
             if month == current_month and len(papers_of_current_month)< 3: # add a paper to the three of current month
                 papers_of_current_month.append(entry)
@@ -85,7 +85,7 @@ def createDashboardData(claim, openai_client : OpenAI):
                     break
                 
     print(research_papers)
-    return process_research_papers_with_openai(research_papers, claim, openai_client)
+    return process_research_papers_with_openai(research_papers, claim, openai_client) # returns days and and the average scores.
 
 def process_research_papers_with_openai(research_papers : dict, claim : str, client : OpenAI):
     """
