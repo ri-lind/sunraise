@@ -199,3 +199,10 @@ def augment_if_not_three_months(research_papers: dict, claim: str, openai_client
                 research_papers[(month, year)] = analyzed_papers
             else:
                 research_papers[(month, year)].extend(analyzed_papers)
+
+def convert_to_jsonable(data: dict):
+    json_data = {}
+    for key, value in data.items():
+        json_data[f"{key}"] = value
+    
+    return json_data

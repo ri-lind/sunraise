@@ -64,21 +64,36 @@ export function updateDashboard(claim) {
     })
     .then(response => response.json())
     .then(data => {
-        // Convert the month numbers to month names
+        // Convert data keys (month, year tuples) into labels
         const monthNames = [
-            "January", "February", "March", "April", "May", "June", 
-            "July", "August", "September", "October", "November", "December"
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
         ];
 
-        // Extract labels (month names) and data (average scores)
-        const labels = Object.keys(data).map(month => monthNames[parseInt(month) - 1]);
-        const scores = Object.values(data);
+        const sortedData = Object.entries(data).sort(([a], [b]) => {
+            // Extract year and month from the string keys
+            const [monthA, yearA] = a.match(/\d+/g).map(Number);
+            const [monthB, yearB] = b.match(/\d+/g).map(Number);
+        
+            // First compare years, then months if years are the same
+            return yearA - yearB || monthA - monthB;
+        });
+        
+        // Generate labels (e.g., "Jan 2025") in sorted order
+        const labels = sortedData.map(([key]) => {
+            const [month, year] = key.match(/\d+/g).map(Number);
+            return `${monthNames[month - 1]} ${year}`;
+        });
+        
+        // Extract scores in sorted order
+        const scores = sortedData.map(([_, value]) => value);
+        
 
         // Update the chart
         chart = new Chart(ctx, {
             type: 'line', // Example chart type
             data: {
-                labels: labels, // Use the month names as labels
+                labels: labels, // Use the formatted labels
                 datasets: [{
                     label: 'Average Scores',
                     data: scores, // Use the scores from the backend
@@ -100,7 +115,7 @@ export function updateDashboard(claim) {
                     x: {
                         title: {
                             display: true,
-                            text: 'Month',
+                            text: 'Month and Year',
                         },
                     },
                     y: {

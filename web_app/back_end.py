@@ -8,7 +8,7 @@ import fitz
 from munch import Munch
 
 from data_pipeline import fetch_research_papers, extract_insight, analyze_paper_support, analyze_overall_sentiment
-from dashboard_utilities import createDashboardData
+from dashboard_utilities import createDashboardData, convert_to_jsonable
 
 app = Flask(__name__)
 
@@ -151,8 +151,9 @@ def generate_dashboard():
     
     data = createDashboardData(claim, openai_client)
     
+    json_data = convert_to_jsonable(data)
     
-    return jsonify(data)
+    return jsonify(json_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
