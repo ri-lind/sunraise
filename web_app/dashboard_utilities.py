@@ -4,6 +4,9 @@ from munch import Munch
 from data_pipeline import analyze_paper_support
 from entities import TableEntryResearchPaper
 import time
+import random
+
+
 def createDashboardData(claim, openai_client : OpenAI):
     # 3 years back with 3 papers each.
     # extract the subject from the claim, with a prompt.
@@ -71,60 +74,69 @@ def get_latest_month(url : str)-> int:
     return int(latest_entry.published[5:7]) # return the month of the first entry of this publication.
 
 
+
 def return_research_papers(completion):
     search_params = completion.choices[0].message.content.strip()
-    
-    
     base_url = "http://export.arxiv.org/api/query?"
 
     # Construct the query parameter to search for papers with the title containing the given phrase.
-    # Note: The double quotes need to be included in the query.
     search_query = f'all:{search_params}'
-    start = 0                     # retreive the first 5 results
-    # Create dictionary for query parameters. The max_results parameter is not shown in the template URL,
-    # but you can include it if needed.
-    research_papers = {}    
-    current_month = get_latest_month(f'{base_url}search_query={search_query}&start={start}&max_results={10}&sortBy=submittedDate&sortOrder=descending') # initialize first month without looping logic
-    month_counter = 0
-    batches = 1000
+    start = 0
+    research_papers = {}
     
+    # enter january
+    starting_month_url = f'{base_url}search_query={search_query}&start=0&max_results=3&sortBy=submittedDate&sortOrder=ascending'
+    starting_month = get_latest_month(starting_month_url)
+    research_papers[starting_month] = []
+    api_response = feedparser.parse(starting_month_url)
+    api_response = Munch(api_response)
+    for entry in api_response.entries:
+        research_papers[starting_month].append(entry)
+    
+    batches = 1000  # Initial batch size
+    max_samples = 3  # Number of papers to sample per month
+    currentMonth = starting_month
     start_time = time.time()
-    while len(research_papers.keys()) <= 4: # this changes the number of months received back on the screen
-        if int(time.time() - start_time)> 20: # break if more than 20 seconds.
-            break
-        papers_of_current_month = research_papers.get(current_month, [])
-        url = f'{base_url}search_query={search_query}&start={start}&max_results={batches}&sortBy=submittedDate&sortOrder=descending'
+    while len(research_papers.keys()) <= 4:  # Targeting at least 4 months of data
+        # Adjust batch size after timeout
+        if int(time.time() - start_time) > 120:
+            batches *= 2
+            start_time = time.time()  # Reset the timer for the next adjustment
+
+        # Fetch data from the API
+        url = f'{base_url}search_query={search_query}&start={start}&max_results={batches}&sortBy=submittedDate&sortOrder=descending' # this gives me the oldest of the page
         api_response = feedparser.parse(url)
         api_response = Munch(api_response)
+
+        # Get all entries in the current batch
+        entries = api_response.entries
+        if not entries or int(entries[-1].updated[5:7]) == currentMonth:  # Break if no more entries are found
+            start = start + batches
+            continue
         
-        for entry in api_response.entries:
+        # Group papers by month
+        for entry in entries[::-1]:
             entry = Munch(entry)
-            
-            month = int(entry.updated[5:7]) # actually day
-            
-            if month == current_month and len(papers_of_current_month)< 3: # add a paper to the three of current month
-                papers_of_current_month.append(entry)
-                
-                continue
-            elif len(papers_of_current_month) == 3:
-                month_counter = month_counter + 1
-                research_papers[current_month] = papers_of_current_month.copy()
-                if current_month ==1:
-                    current_month = 12
-                else:
-                    current_month = current_month - 1
-                papers_of_current_month = research_papers.get(current_month, [])
-                continue
-            elif month != current_month:
-                # either end without next month, go to next batch of 100
-                # or paper list could not be completed here.
-                if len(papers_of_current_month) < 3:
-                    research_papers[current_month] = papers_of_current_month.copy()
-                    start = start + batches
-                    print(start)
-                    break
-                
+            date_str = entry.updated[:10]  # Extract the 'YYYY-MM-DD' format
+            month = int(entry.updated[5:7])  # Extract the month
+            year = int(entry.updated[:4])  # Extract the year
+
+            if month not in research_papers.keys():
+                research_papers[month] = []
+
+            # Add papers until the max_samples limit is reached
+            if len(research_papers[month]) < max_samples:
+                research_papers[month].append(entry)
+            else:
+                break
+        
+        
+        # Update start for the next batch
+        if len(research_papers.keys()) <= 4:
+            start += batches
+
     return research_papers
+
 
 
 def augment_if_not_three_months(research_papers: dict, claim: str, openai_client: OpenAI):
