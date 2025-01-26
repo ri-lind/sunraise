@@ -46,19 +46,20 @@ function createChatbotPanel() {
     panel = document.createElement("div");
     panel.id = "chatbot-panel";
     panel.style.position = "fixed";
-    panel.style.top = "0";
+    panel.style.bottom = "0";
     panel.style.right = "-300px";
     panel.style.width = "300px";
-    panel.style.height = "100%";
+    panel.style.height = "50%";
+    panel.style.borderLeft = "1px solid #ccc";
+    panel.style.borderRadius = "8px";
     panel.style.backgroundColor = "#f9f9f9";
-    panel.style.boxShadow = "-2px 0 5px rgba(0, 0, 0, 0.2)";
     panel.style.transition = "right 0.3s ease";
     panel.style.display = "flex";
     panel.style.flexDirection = "column";
     panel.innerHTML = `
         <div style="padding: 10px; background-color: #007bff; color: white; display: flex; justify-content: space-between; align-items: center;">
             <h3>Chatbot</h3>
-            <button id="close-chatbot" style="color: white; background: none; border: none; font-size: 1.5rem; cursor: pointer; margin-bottom: 0px;">&times;</button>
+            <button id="close-chatbot" style="color: white; background: none; border: none; font-size: 2rem; cursor: pointer; margin-bottom: 0px;">&times;</button>
         </div>
         <div id="chatbot-content" style="flex: 1; padding: 10px; overflow-y: auto;">
             <p>🤖 Welcome! Ask me anything about your claim.</p>
@@ -68,19 +69,19 @@ function createChatbotPanel() {
             <button 
                 id="chatbot-send" 
                 style="
-                padding: 0; 
+                padding-bottom: 15px; 
                 background-color: #007bff; 
                 color: white; 
                 border: none; 
-                border-radius: 50%; 
+                border-radius: 55%; 
                 cursor: pointer; 
-                font-size: 2.5rem; 
+                font-size: 2rem; 
                 height: 40px; 
                 width: 40px; 
                 display: flex; 
                 align-items: center; 
                 justify-content: center; 
-                line-height: 1.5;
+                line-height: 1;
                 margin-bottom: 0;">
             ↑
             </button>
