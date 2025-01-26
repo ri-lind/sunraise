@@ -5,3 +5,5 @@ PyMuPDF
 haystack-ai
 sentence-transformers>=3.0.0
 openai
+python-dotenv
+feedparser
