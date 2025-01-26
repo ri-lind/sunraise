@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from werkzeug.utils import secure_filename
 import os
-from entities import ResearchPaper, IndustryInsight
 from openai import OpenAI
 import random
 import fitz

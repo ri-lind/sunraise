@@ -1,0 +1,6 @@
+Flask
+pydantic
+munch
+haystack
+PyMuPDF
+
