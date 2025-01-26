@@ -25,16 +25,22 @@ textarea {
   overflow-wrap: break-word;
 }
 
-.search_button {
+button {
   font-family: "Montserrat", serif;
+  font-weight: 500;
   padding: 10px 20px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: white;
   background-color: #007bff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
+  margin-bottom: 20px;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 
 .container {

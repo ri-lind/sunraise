@@ -12,18 +12,6 @@ body {
   font-weight: 400;
 }
 
-.search_button {
-  font-family: "Montserrat", serif;
-  padding: 10px 20px;
-  font-size: 1rem;
-  color: white;
-  background-color: #007bff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-}
-
 .logo-container {
   display: flex;
   flex-direction: column;
@@ -181,7 +169,6 @@ textarea {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 800px;
 }
 
@@ -196,6 +183,7 @@ textarea {
   position: relative;
   width: 100%;
   height: 400px;
+  box-shadow: none;
 }
 
 .chat-bubble {

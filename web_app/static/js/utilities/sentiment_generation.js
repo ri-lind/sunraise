@@ -10,28 +10,37 @@ export function handleSentimentGeneration(claim) {
       const sentimentIcon = document.getElementById("sentiment-icon");
 
       if (data.sentiment) {
-        const updatedText = data.sentiment.split(".").slice(1).join(".").trim();
-        sentimentIcon.textContent = "❓";
+        sentimentResult.textContent = "";
+        sentimentIcon.textContent = "";
+
+        const sentimentText = data.sentiment;
+        const sentimentIconText = data.sentiment
+          .toLowerCase()
+          .includes("support")
+          ? "✅"
+          : data.sentiment.toLowerCase().includes("refute")
+          ? "❌"
+          : data.sentiment.toLowerCase().includes("neutral")
+          ? "⚖️"
+          : "❓";
 
         let index = 0;
-        sentimentResult.textContent = ""; 
-        const typingInterval = setInterval(() => {
-          sentimentResult.textContent += updatedText.charAt(index);
-          index++;
-          if (index === updatedText.length) {
-            clearInterval(typingInterval);
 
-            if (data.sentiment.toLowerCase().includes("support")) {
-              sentimentIcon.textContent = "✅";
-            } else if (data.sentiment.toLowerCase().includes("refute")) {
-              sentimentIcon.textContent = "❌";
-            } else if (data.sentiment.toLowerCase().includes("neutral")) {
-              sentimentIcon.textContent = "⚖️";
-            } else {
-              sentimentIcon.textContent = "❓";
-            }
+        const typingInterval = setInterval(() => {
+          if (index < sentimentText.length) {
+            sentimentResult.textContent += sentimentText[index];
+            index++;
+          } else {
+            clearInterval(typingInterval);
           }
-        }, 10); 
+        }, 10);
+
+        sentimentIcon.textContent = sentimentIconText;
+
+        const updatedText = sentimentText.split(".").slice(1).join(".").trim();
+        setTimeout(() => {
+          sentimentResult.textContent = updatedText;
+        }, sentimentText.length * 50 + 500);
       } else {
         sentimentResult.textContent = "No sentiment available.";
         sentimentIcon.textContent = "❓";
