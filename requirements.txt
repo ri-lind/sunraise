@@ -1,6 +1,7 @@
 Flask
 pydantic
 munch
-haystack
 PyMuPDF
-
+haystack-ai
+sentence-transformers>=3.0.0
+openai
