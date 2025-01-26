@@ -3,4 +3,4 @@ pydantic
 munch
 haystack
 PyMuPDF
-
+openai

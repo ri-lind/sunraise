@@ -1,126 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&display=swap");
+
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    align-items: center; /* Center horizontally */
-    height: 100vh;
-    margin: 0;
-    background-color: #f9f9f9;
+  font-family: "Montserrat", serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f9f9f9;
+  font-weight: 400;
 }
+
+textarea {
+  width: 95%;
+  height: 150px;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #333;
+  overflow-wrap: break-word;
+}
+
+.search_button {
+  font-family: "Montserrat", serif;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
 .container {
-    display: flex;
-    width: 80%;
-    height: 70%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  width: 80%;
+  height: 70%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 .panel {
-    flex: 1;
-    padding: 20px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    overflow-y: auto;
+  flex: 1;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  overflow-y: auto;
 }
-.panel.left {
-    border-right: none;
-}
+
 .panel h2 {
-    margin-top: 0;
+  margin-top: 0;
 }
 .drop-zone {
-    border: 2px dashed #ccc;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
 }
 .drop-zone.dragging {
-    border-color: #007bff;
-    background-color: #f0f8ff;
+  border-color: #007bff;
+  background-color: #f0f8ff;
 }
 .panel.right {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 .insight {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f0f0f0;
-    border-left: 4px solid #007bff;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-left: 4px solid #007bff;
 }
-
 .logo-container {
-    text-align: center; /* Center everything in the container */
-    margin: 20px 0; /* Add spacing above and below */
+  text-align: center;
+  margin: 20px 0;
 }
-
 .logo-text {
-    font-family: 'Arial', sans-serif;
-    font-size: 2.5rem; /* Large and prominent */
-    font-weight: bold; /* Bold text */
-    letter-spacing: 0.1em; /* Add spacing between letters */
-    text-transform: uppercase; /* Make all letters uppercase */
-    color: #007bff; /* Default blue color */
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #007bff;
 }
-
 .logo-text .highlight {
-    color: #ff9500; /* Orange color for "AI" */
+  color: #ff9500;
 }
-
 .quote {
-    font-family: 'Georgia', serif; /* Use a serif font for the quote */
-    font-size: 1.2rem; /* Slightly smaller size */
-    font-style: italic; /* Make the text italic */
-    color: #555; /* Neutral gray color */
-    margin-top: 10px; /* Add spacing between the logo and the quote */
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: 10px;
 }
-
-
-/* Adjust the container to give space for the logo */
 .container {
-    margin-top: 20px; /* Add spacing below the logo */
+  margin-top: 20px;
 }
-
 .logo-image {
-    width: 60px; /* Reduce the width for a smaller logo */
-    height: auto; /* Maintain the aspect ratio */
-    cursor: pointer; /* Optional: Change cursor to pointer on hover */
+  width: 60px;
+  height: auto;
+  cursor: pointer;
 }
-
 .logo-image:hover {
-    transform: scale(1.1); /* Slightly enlarge on hover */
-    transition: transform 0.2s ease-in-out;
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
 }
-
 .drop-zone-image {
-    display: block;
-    margin: 0 auto 10px;
-    max-width: 20%; /* Slightly smaller than the drop-zone width */
-    height: auto;
+  display: block;
+  margin: 0 auto 10px;
+  max-width: 20%;
+  height: auto;
 }
 .generate-button {
-    margin-top: 10px;
-    padding: 12px 20px; /* Bigger padding for a larger button */
-    font-size: 1rem; /* Slightly larger text size */
-    font-weight: bold; /* Make the text bold */
-    color: white; /* Text color */
-    background-color: #87CEEB; /* Light blue background */
-    border: none; /* Remove default border */
-    border-radius: 10px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out; /* Smooth transform transitions */
+  font-family: "Montserrat", serif;
+  font-weight: 500;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  margin-bottom: 20px;
+  width: 100%;
+  margin-top: 10px;
 }
 
 .generate-button:hover {
-    background-color: #6495ED; /* Slightly darker blue on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+  background-color: #0058b6;
 }
-
 .generate-button:active {
-    background-color: #4682B4; /* Even darker blue when pressed */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduce shadow on click */
+  background-color: #0058b6;
 }
-
 .generate-button.slide-right {
-    transform: translateX(100px); /* Slide 100px to the right */
-    background-color: #4682B4; /* Change background color during slide */
+  transform: translateX(100px);
+  background-color: #0058b6;
 }

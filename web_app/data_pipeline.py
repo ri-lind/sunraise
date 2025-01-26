@@ -1,7 +1,6 @@
 import os
 import sqlite3
 from dotenv import load_dotenv
-from crossref.restful import Works, Etiquette
 from munch import Munch
 from openai import OpenAI
 from typing import List
