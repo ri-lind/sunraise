@@ -26,7 +26,7 @@ export function handleSentimentGeneration(claim) {
             }
 
             // Split the text into sentences, remove the first, and join the rest
-            const updatedText = fullText.split('.').slice(1).join('.').trim();
+            const updatedText = data.sentiment.split('.').slice(1).join('.').trim();
 
             // Update the text content
             sentimentResult.textContent = updatedText;
