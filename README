@@ -1,5 +1,3 @@
-# Prototype in the context of a university project.
+Run via:
 
-To be continued.
-
-![alt text](image.png)
+py .\web_app\server.py
