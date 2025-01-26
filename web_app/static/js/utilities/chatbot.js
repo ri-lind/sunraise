@@ -65,7 +65,26 @@ function createChatbotPanel() {
         </div>
         <div style="padding: 10px; border-top: 1px solid #ddd; display: flex; gap: 10px; height: 80px; align-items: center;">
             <input type="text" id="chatbot-input" placeholder="Type your question..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; height: 30%;">
-            <button id="chatbot-send" style="padding: 0 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; height: 40%; margin-bottom: 0; width: 80%;">Send</button>
+            <button 
+                id="chatbot-send" 
+                style="
+                padding: 0; 
+                background-color: #007bff; 
+                color: white; 
+                border: none; 
+                border-radius: 50%; 
+                cursor: pointer; 
+                font-size: 2.5rem; 
+                height: 40px; 
+                width: 40px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                line-height: 1.5;
+                margin-bottom: 0;">
+            ↑
+            </button>
+
         </div>
         `;
 
