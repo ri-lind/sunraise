@@ -7,9 +7,33 @@ export function handleSentimentGeneration(claim) {
     })
     .then(response => response.json())
     .then(data => {
-        // Handle sentiment result
+        // Handle sentiment result with icon
         const sentimentResult = document.getElementById('sentiment-result');
-        sentimentResult.textContent = data.sentiment || "No sentiment available.";
+        const sentimentIcon = document.getElementById('sentiment-icon');
+
+        if (data.sentiment) {
+            sentimentResult.textContent = data.sentiment;
+            console.log(data.sentiment.toLowerCase())
+            // Update the icon based on sentiment
+            if (data.sentiment.toLowerCase().includes('support')) {
+                sentimentIcon.textContent = '✅'; // Happy face for positive sentiment
+            } else if (data.sentiment.toLowerCase().includes('refute')) {
+                sentimentIcon.textContent = '❌'; // Sad face for negative sentiment
+            } else if (data.sentiment.toLowerCase().includes('neutral')) {
+                sentimentIcon.textContent = '⚖️'; // Neutral face
+            } else {
+                sentimentIcon.textContent = '❓'; // Unknown sentiment
+            }
+
+            // Split the text into sentences, remove the first, and join the rest
+            const updatedText = fullText.split('.').slice(1).join('.').trim();
+
+            // Update the text content
+            sentimentResult.textContent = updatedText;
+        } else {
+            sentimentResult.textContent = "No sentiment available.";
+            sentimentIcon.textContent = '❓';
+        }
 
         // Populate the research table
         const tableBody = document.getElementById('research-table').querySelector('tbody');

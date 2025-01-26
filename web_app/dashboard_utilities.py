@@ -3,9 +3,6 @@ import feedparser
 from munch import Munch
 from data_pipeline import analyze_paper_support
 from entities import TableEntryResearchPaper
-import time
-import random
-
 
 def createDashboardData(claim, openai_client : OpenAI):
     # 3 years back with 3 papers each.
@@ -75,8 +72,6 @@ def get_latest_month_year(url : str)-> int:
     month = int(latest_entry.published[5:7])
     return (month, year) # return the month of the first entry of this publication.
 
-
-
 def return_research_papers(completion):
     search_params = completion.choices[0].message.content.strip()
     base_url = "http://export.arxiv.org/api/query?"
@@ -138,8 +133,6 @@ def return_research_papers(completion):
             start += step_size
 
     return research_papers
-
-
 
 def augment_if_not_three_months(research_papers: dict, claim: str, openai_client: OpenAI):
     """

@@ -194,7 +194,7 @@ def start_chatbot():
 
         # Initialize the chatbot with the search parameters
         global rag_conversation, system_message, user_message
-        rag_conversation, system_message, user_message = initialize_chatbot(user_subject=search_params, no_papers=5)
+        rag_conversation, system_message, user_message = initialize_chatbot(user_subject=search_params, no_papers=20)
 
         # Respond with success
         return jsonify({"success": True})
@@ -227,13 +227,13 @@ def chatbot():
         )
 
         # Extract the chatbot's response
-        search_query = res['query_rephrase_llm']['replies'][0].text
-        assistant_response = res['llm']['replies'][0].text
+        search_query = res['query_rephrase_llm']['replies'][0]
+        assistant_response = res['llm']['replies'][0]
 
         return jsonify({
             "success": True,
             "search_query": search_query,
-            "response": assistant_response
+            "response": assistant_response.text
         })
 
     except Exception as e:

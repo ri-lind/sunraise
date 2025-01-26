@@ -151,13 +151,15 @@ function displayErrorInPanel(message) {
 function updateChatUI(userQuestion, botResponse) {
     const chatbotContent = document.getElementById('chatbot-content');
 
-    // Append the user's question
-    const userMessage = document.createElement('p');
+    // Append the user's question as a styled chat bubble
+    const userMessage = document.createElement('div');
+    userMessage.classList.add('chat-bubble', 'user-message');
     userMessage.innerHTML = `<strong>You:</strong> ${userQuestion}`;
     chatbotContent.appendChild(userMessage);
 
-    // Append the bot's response
-    const botMessage = document.createElement('p');
+    // Append the bot's response as a styled chat bubble
+    const botMessage = document.createElement('div');
+    botMessage.classList.add('chat-bubble', 'bot-message');
     botMessage.innerHTML = `<strong>AI:</strong> ${botResponse}`;
     chatbotContent.appendChild(botMessage);
 
